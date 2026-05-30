@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de quittances de loyer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- FORMULAIRE -->
+    <aside class="form-panel">
+      <h1>Quittance de loyer</h1>
+
+      <section>
+        <h2>Bailleur</h2>
+        <label>Nom complet<input type="text" id="bailleurNom" placeholder="Jean Dupont" /></label>
+        <label>Adresse<input type="text" id="bailleurAdresse" placeholder="12 rue des Lilas, 75001 Paris" /></label>
+        <label class="label-signature">
+          Signature (image)
+          <div class="signature-upload" id="signatureUploadZone">
+            <span id="signatureUploadHint">Cliquer ou déposer une image</span>
+            <img id="signatureThumb" hidden />
+          </div>
+          <input type="file" id="signatureFile" accept="image/*" style="display:none" />
+        </label>
+        <button type="button" id="btnSupprimerSignature" hidden>Supprimer la signature</button>
+      </section>
+
+      <section>
+        <h2>Locataire</h2>
+        <label>Nom complet<input type="text" id="locataireNom" placeholder="Marie Martin" /></label>
+        <label>Adresse du logement<input type="text" id="logementAdresse" placeholder="8 avenue Voltaire, 75011 Paris" /></label>
+      </section>
+
+      <section>
+        <h2>Loyer</h2>
+        <div class="periode-row">
+          <label>Du mois<input type="month" id="periodeDebut" /></label>
+          <label>Au mois<input type="month" id="periodeFin" /></label>
+        </div>
+        <div id="periodeInfo" class="periode-info">1 quittance</div>
+        <p id="periodeError" class="periode-error" hidden>Maximum 12 mois.</p>
+        <label>Loyer hors charges (€)<input type="number" id="loyerHC" placeholder="800" min="0" step="0.01" /></label>
+        <label>Charges (€)<input type="number" id="charges" placeholder="50" min="0" step="0.01" /></label>
+        <label>Date de quittancement<input type="date" id="dateQuittance" /></label>
+      </section>
+
+      <button id="btnTelecharger">Télécharger le PDF</button>
+    </aside>
+
+    <!-- APERÇU -->
+    <main class="preview-panel">
+      <p class="preview-label">Aperçu</p>
+      <div class="page-wrapper">
+        <div id="quittance" class="quittance">
+
+          <div class="quittance-header">
+            <div class="bailleur-block">
+              <strong id="prev-bailleurNom">Jean Dupont</strong><br />
+              <span id="prev-bailleurAdresse">12 rue des Lilas, 75001 Paris</span>
+            </div>
+            <div class="title-block">
+              <h2>QUITTANCE DE LOYER</h2>
+            </div>
+          </div>
+
+          <hr />
+
+          <p class="periode-line">
+            Période : <strong id="prev-periode">—</strong>
+          </p>
+
+          <p class="body-text">
+            Je soussigné(e) <strong id="prev-bailleurNom2">Jean Dupont</strong>, bailleur,
+            déclare avoir reçu de <strong id="prev-locataireNom">Marie Martin</strong>,
+            locataire du logement situé au
+            <strong id="prev-logementAdresse">8 avenue Voltaire, 75011 Paris</strong>,
+            la somme de <strong id="prev-total">—</strong> €
+            au titre du loyer et des charges du logement désigné ci-dessus,
+            pour la période indiquée.
+          </p>
+
+          <table class="detail-table">
+            <tbody>
+              <tr>
+                <td>Loyer hors charges</td>
+                <td id="prev-loyerHC" class="amount">— €</td>
+              </tr>
+              <tr>
+                <td>Charges</td>
+                <td id="prev-charges" class="amount">— €</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td id="prev-total2" class="amount">— €</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="body-text">
+            Et lui en donne quittance, sous réserve de tous mes droits.
+          </p>
+
+          <div class="signature-block">
+            <p>Fait le <strong id="prev-dateQuittance">—</strong></p>
+            <p class="signature-label">Signature du bailleur</p>
+            <img id="prev-signature" class="signature-img" hidden />
+            <div class="signature-line"></div>
+            <p id="prev-bailleurNom3" class="signature-name">Jean Dupont</p>
+          </div>
+
+          <div class="legal-note">
+            La quittance est remise gratuitement au locataire qui en fait la demande
+            (art. 21 de la loi n° 89-462 du 6 juillet 1989).
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

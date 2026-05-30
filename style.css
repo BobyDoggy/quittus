@@ -1,0 +1,290 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  min-height: 100vh;
+}
+
+/* ── Layout ── */
+.app {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Formulaire ── */
+.form-panel {
+  background: #1a1a2e;
+  color: #e0e0f0;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.form-panel h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #fff;
+  border-bottom: 2px solid #3d5af1;
+  padding-bottom: 12px;
+}
+
+.form-panel h2 {
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #3d5af1;
+  margin-bottom: 10px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: .82rem;
+  color: #a0a8c8;
+}
+
+input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #2e3255;
+  background: #12122a;
+  color: #fff;
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .2s;
+}
+
+input:focus { border-color: #3d5af1; }
+input::placeholder { color: #4a4e6e; }
+
+/* ── Signature upload ── */
+.label-signature { cursor: default; }
+
+.signature-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  border: 2px dashed #2e3255;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  overflow: hidden;
+}
+
+.signature-upload:hover { border-color: #3d5af1; background: #1a1a3a; }
+.signature-upload.drag-over { border-color: #3d5af1; background: #1e2450; }
+
+#signatureUploadHint {
+  font-size: .78rem;
+  color: #4a4e6e;
+  pointer-events: none;
+}
+
+#signatureThumb {
+  max-height: 64px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+#btnSupprimerSignature {
+  padding: 5px 10px;
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b44;
+  border-radius: 6px;
+  font-size: .78rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+#btnSupprimerSignature:hover { background: #ff6b6b22; }
+
+/* ── Signature dans la quittance ── */
+.signature-img {
+  max-height: 72px;
+  max-width: 200px;
+  object-fit: contain;
+  display: block;
+  margin-top: 4px;
+}
+
+.periode-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.periode-info {
+  background: #3d5af122;
+  color: #8ca0ff;
+  border: 1px solid #3d5af155;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: .82rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.periode-error {
+  color: #ff6b6b;
+  font-size: .8rem;
+  text-align: center;
+}
+
+#btnTelecharger {
+  margin-top: auto;
+  padding: 12px;
+  background: #3d5af1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+
+#btnTelecharger:hover  { background: #2e49d8; }
+#btnTelecharger:active { transform: scale(.98); }
+
+/* ── Zone d'aperçu ── */
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.preview-label {
+  font-size: .75rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.page-wrapper {
+  width: 100%;
+  max-width: 720px;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,.15));
+}
+
+/* ── Quittance (page A4-like) ── */
+.quittance {
+  background: #fff;
+  padding: 48px 52px;
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #222;
+}
+
+.quittance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.bailleur-block {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.title-block h2 {
+  font-size: 17px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #1a1a2e;
+  text-transform: uppercase;
+}
+
+hr {
+  border: none;
+  border-top: 2px solid #1a1a2e;
+  margin: 0 0 20px;
+}
+
+.periode-line {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.body-text {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.detail-table td {
+  padding: 7px 12px;
+  border: 1px solid #ddd;
+}
+
+.detail-table td.amount {
+  text-align: right;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.total-row td {
+  font-weight: 700;
+  background: #f5f7ff;
+}
+
+.signature-block {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.signature-label {
+  color: #555;
+  font-style: italic;
+}
+
+.signature-line {
+  width: 200px;
+  border-bottom: 1px solid #555;
+  margin-top: 40px;
+}
+
+.signature-name {
+  font-size: 13px;
+}
+
+.legal-note {
+  margin-top: 40px;
+  padding-top: 12px;
+  border-top: 1px solid #ccc;
+  font-size: 10px;
+  color: #777;
+  font-style: italic;
+  line-height: 1.5;
+}
