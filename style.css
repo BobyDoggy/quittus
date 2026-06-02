@@ -59,6 +59,8 @@ label {
 }
 
 input {
+  width: 100%;
+  min-width: 0;
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #2e3255;
@@ -122,6 +124,43 @@ input::placeholder { color: #4a4e6e; }
   object-fit: contain;
   display: block;
   margin-top: 4px;
+}
+
+/* ── Mode selector ── */
+.mode-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #2e3255;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mode-option {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 6px;
+  gap: 6px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  text-align: center;
+}
+
+.mode-option:first-child { border-right: 1px solid #2e3255; }
+
+.mode-option input[type="radio"] {
+  display: none;
+}
+
+.mode-option:has(input:checked) {
+  background: #3d5af1;
+  color: #fff;
+}
+
+#champs-multiple:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .periode-row {

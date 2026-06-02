@@ -37,12 +37,29 @@
 
       <section>
         <h2>Loyer</h2>
-        <div class="periode-row">
-          <label>Du mois<input type="month" id="periodeDebut" /></label>
-          <label>Au mois<input type="month" id="periodeFin" /></label>
+        <div class="mode-selector">
+          <label class="mode-option">
+            <input type="radio" name="mode" value="unique" />
+            Quittance unique
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="mode" value="multiple" />
+            Plusieurs quittances
+          </label>
         </div>
-        <div id="periodeInfo" class="periode-info">1 quittance</div>
-        <p id="periodeError" class="periode-error" hidden>Maximum 12 mois.</p>
+
+        <div id="champs-unique">
+          <label>Mois<input type="month" id="periodeMois" /></label>
+        </div>
+
+        <div id="champs-multiple" hidden>
+          <div class="periode-row">
+            <label>Du mois<input type="month" id="periodeDebut" /></label>
+            <label>Au mois<input type="month" id="periodeFin" /></label>
+          </div>
+          <div id="periodeInfo" class="periode-info">1 quittance</div>
+          <p id="periodeError" class="periode-error" hidden>Maximum 12 mois.</p>
+        </div>
         <label>Loyer hors charges (€)<input type="number" id="loyerHC" placeholder="800" min="0" step="0.01" /></label>
         <label>Charges (€)<input type="number" id="charges" placeholder="50" min="0" step="0.01" /></label>
         <label>Date de quittancement<input type="date" id="dateQuittance" /></label>

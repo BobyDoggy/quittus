@@ -1,9 +1,11 @@
+// @ts-nocheck
 // ── Champs du formulaire ──
 const fields = {
   bailleurNom:     document.getElementById('bailleurNom'),
   bailleurAdresse: document.getElementById('bailleurAdresse'),
   locataireNom:    document.getElementById('locataireNom'),
   logementAdresse: document.getElementById('logementAdresse'),
+  periodeMois:     document.getElementById('periodeMois'),
   periodeDebut:    document.getElementById('periodeDebut'),
   periodeFin:      document.getElementById('periodeFin'),
   loyerHC:         document.getElementById('loyerHC'),
@@ -11,9 +13,15 @@ const fields = {
   dateQuittance:   document.getElementById('dateQuittance'),
 };
 
-const periodeInfo  = document.getElementById('periodeInfo');
-const periodeError = document.getElementById('periodeError');
-const btnDl        = document.getElementById('btnTelecharger');
+const periodeInfo    = document.getElementById('periodeInfo');
+const periodeError   = document.getElementById('periodeError');
+const btnDl          = document.getElementById('btnTelecharger');
+const champsUnique   = document.getElementById('champs-unique');
+const champsMultiple = document.getElementById('champs-multiple');
+
+function getMode() {
+  return document.querySelector('input[name="mode"]:checked')?.value ?? 'unique';
+}
 
 // ── Signature ──
 const signatureUploadZone = document.getElementById('signatureUploadZone');
@@ -91,8 +99,18 @@ function loadForm() {
 
   // Valeurs par défaut
   fields.dateQuittance.value = today.toISOString().split('T')[0];
+  fields.periodeMois.value   = thisMonth;
   fields.periodeDebut.value  = thisMonth;
   fields.periodeFin.value    = thisMonth;
+
+  // Restaure le mode
+  const savedMode = localStorage.getItem('quittus_mode') || 'unique';
+  const modeRadio = document.querySelector(`input[name="mode"][value="${savedMode}"]`);
+  if (modeRadio) {
+    modeRadio.checked     = true;
+    champsUnique.hidden   = savedMode === 'multiple';
+    champsMultiple.hidden = savedMode !== 'multiple';
+  }
 
   // Écrase avec les données sauvegardées si elles existent
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -105,6 +123,18 @@ function loadForm() {
 
 loadForm();
 loadSignature();
+
+// ── Changement de mode ──
+document.querySelectorAll('input[name="mode"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const multi = getMode() === 'multiple';
+    champsUnique.hidden   = multi;
+    champsMultiple.hidden = !multi;
+    localStorage.setItem('quittus_mode', getMode());
+    validateRange();
+    updatePreview();
+  });
+});
 
 // ── Helpers ──
 function toMonthStr(date) {
@@ -146,6 +176,11 @@ function getMonthRange(debut, fin) {
 
 // ── Validation plage ──
 function validateRange() {
+  if (getMode() === 'unique') {
+    btnDl.disabled = false;
+    return [fields.periodeMois.value || toMonthStr(new Date())];
+  }
+
   const range = getMonthRange(fields.periodeDebut.value, fields.periodeFin.value);
   const count = range.length;
   const over  = count > 12;
@@ -173,7 +208,7 @@ function updatePreview(overridePeriode) {
 
   const mois  = overridePeriode
     ? formatPeriode(overridePeriode)
-    : formatPeriode(fields.periodeDebut.value);
+    : formatPeriode(getMode() === 'unique' ? fields.periodeMois.value : fields.periodeDebut.value);
 
   setText('prev-bailleurNom',     bNom);
   setText('prev-bailleurNom2',    bNom);
@@ -230,19 +265,19 @@ btnDl.addEventListener('click', async () => {
     await new Promise(r => setTimeout(r, 60)); // laisse le DOM se rafraîchir
 
     const canvas = await html2canvas(quittance, {
-      scale: 3,
+      scale: 2,
       useCORS: true,
       backgroundColor: '#ffffff',
     });
 
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL('image/jpeg', 0.88);
     const imgW = canvas.width, imgH = canvas.height;
     const drawH = imgH * (availW / imgW);
     const finalH = Math.min(drawH, pageH - margin * 2);
     const finalW = finalH === drawH ? availW : imgW * (finalH / imgH);
 
     if (i > 0) pdf.addPage();
-    pdf.addImage(imgData, 'PNG', margin, margin, finalW, finalH);
+    pdf.addImage(imgData, 'JPEG', margin, margin, finalW, finalH);
 
     btnDl.textContent = `Génération… (${i + 1} / ${range.length})`;
   }
